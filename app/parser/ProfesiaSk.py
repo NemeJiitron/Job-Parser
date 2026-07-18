@@ -3,6 +3,7 @@ from app.parser.Base import *
 class ProfesiaParser(BaseParser):
     def parse(self, location: str, keyword: str, db: Session) -> int:
         res = 0
+        location = location.lower()
         def parse_page(page):
             response = requests.get(f"https://www.profesia.sk/praca/{location}/?search_anywhere={keyword}&sort_by=relevance&page_num={page}")
             soup = BeautifulSoup(response.text, "html.parser")
