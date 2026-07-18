@@ -1,24 +1,38 @@
 from app.parser.Base import *
 
 class ProfesiaParser(BaseParser):
-    def parse(self, location: str, keyword: str, db: Session) -> list:
-        response = requests.get(f"https://www.profesia.sk/praca/{location}/?search_anywhere={keyword}&sort_by=relevance")
-        soup = BeautifulSoup(response.text, "html.parser")
-        offers = soup.find_all("li")
-        res = []
-        for offer in offers:
-            try:
-                db_job = Job(
-                    title=offer.h2.span.text,
-                    url=offer.h2.a.get("href"),
-                    company=offer.find("span", "employer").text,
-                    location=location,
-                    keyword=keyword,
-                    source="profesia.sk"
-                )
-                res.append(db_job)
-                db.add(db_job)
-            except Exception:
-                pass
+    def parse(self, location: str, keyword: str, db: Session) -> int:
+        res = 0
+        def parse_page(page):
+            response = requests.get(f"https://www.profesia.sk/praca/{location}/?search_anywhere={keyword}&sort_by=relevance&page_num={page}")
+            soup = BeautifulSoup(response.text, "html.parser")
+            offers = soup.main.find_all("li")
+            added = 0
+            for offer in offers:
+                try:
+                    url = "profesia.sk" + offer.h2.a.get("href")
+                    clean_url = url.split("?")[0]
+                    db_job = Job(
+                        title=offer.h2.span.text,
+                        url=clean_url,
+                        company=offer.find("span", "employer").text,
+                        location=location,
+                        keyword=keyword,
+                        source="profesia.sk"
+                    )
+                    existing = db.query(Job).filter(Job.url == db_job.url).first()
+                    if not existing:
+                        db.add(db_job)
+                        added += 1
+                except Exception:
+                    pass
+            return added
+        i = 1
+        while True:
+            count = parse_page(i)
+            res += count
+            if count == 0:
+                break
+            i += 1
         db.commit()
         return res
