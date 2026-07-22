@@ -58,7 +58,7 @@ async def delete(update: Update, context: CallbackContext):
         finally:
             db.close()
     else:
-        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("Profesia.sk", callback_data="profesia")]])
+        reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("Profesia.sk", callback_data="profesia.sk")]])
         await q.edit_message_text("Сhoose source:", reply_markup=reply_markup)
         return 'source'
 async def choose_source(update: Update, context: CallbackContext):
