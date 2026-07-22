@@ -1,7 +1,7 @@
 from app.parser.Base import *
 
 class ProfesiaParser(BaseParser):
-    def parse(self, location: str, keyword: str, db: Session) -> int:
+    def parse(self, db: Session, location: str, keyword: str, tg_id: str | None = None) -> int:
         res = 0
         location = location.lower()
         def parse_page(page):
@@ -19,7 +19,8 @@ class ProfesiaParser(BaseParser):
                         company=offer.find("span", "employer").text,
                         location=location,
                         keyword=keyword,
-                        source="profesia.sk"
+                        source="profesia.sk",
+                        telegram_id=tg_id
                     )
                     existing = db.query(Job).filter(Job.url == db_job.url).first()
                     if not existing:

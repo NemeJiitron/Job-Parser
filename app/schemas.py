@@ -9,6 +9,9 @@ class JobResponse(BaseModel):
     url: str
     keyword: str
     source: str
+    telegram_id: str | None = None
+    class Config:
+        from_attributes = True
 
 class JobCreate(BaseModel):
     title: str
@@ -17,3 +20,4 @@ class JobCreate(BaseModel):
     url: str
     keyword: str
     source: str
+    telegram_id: str | None = None

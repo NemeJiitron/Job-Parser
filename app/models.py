@@ -10,3 +10,4 @@ class Job(Base):
     url = Column(String, nullable=False)
     keyword = Column(String, nullable=False)
     source = Column(String, nullable=False)
+    telegram_id = Column(String, nullable=True)

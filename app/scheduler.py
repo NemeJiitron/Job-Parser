@@ -7,11 +7,11 @@ def scheduled_profesia():
     db = Session_local()
     try:
         parser = ProfesiaParser()
-        added = parser.parse('bratislava', 'studentska brigada', db)
+        added = parser.parse(db, 'bratislava', 'studentska brigada')
         with open("logs.txt", "a") as f:
             f.write(f"{datetime.today()}: added {added} offers with keyword - studentska brigada\n")
     finally:
         db.close()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(scheduled_profesia, 'cron', hour=9, minute=0)
+scheduler.add_job(scheduled_profesia, 'cron', hour=10, minute=30)
