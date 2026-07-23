@@ -41,7 +41,7 @@ async def jobs(update: Update, context: CallbackContext):
         context.user_data['mode'] = 'search'
     elif q.data == 'get_offers':
         context.user_data['mode'] = 'fetch'
-    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("Profesia.sk", callback_data="profesia")]])
+    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("Profesia.sk", callback_data="profesia.sk")]])
     await q.edit_message_text("Сhoose source:", reply_markup=reply_markup)
     return 'source'
 

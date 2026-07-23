@@ -30,7 +30,7 @@ def get_offers_by(location: str | None = None, source: str | None = None, keywor
 
 def get_parser(source: str):
     match (source):
-        case "profesia":
+        case "profesia.sk":
             parser = ProfesiaParser()
         case _:
             raise HTTPException(status_code=400, detail="Source not supported")
